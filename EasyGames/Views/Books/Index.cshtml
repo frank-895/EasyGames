@@ -1,0 +1,19 @@
+﻿@model IEnumerable<EasyGames.Models.Book>
+
+@{
+    ViewData["Title"] = "Books";
+}
+<link rel="stylesheet" href="~/css/ProductCard.css" />
+
+<h1>Books</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<div class="product-grid">
+    @foreach (var book in Model)
+    {
+        @await Html.PartialAsync("_BookCard", book)
+    }
+</div>
