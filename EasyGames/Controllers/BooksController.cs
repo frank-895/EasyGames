@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EasyGames.Data;
@@ -54,8 +55,12 @@ namespace EasyGames.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Book book, IFormFile imageFile)
+        public async Task<IActionResult> Create([FromForm] Book book, IFormFile? imageFile)
         {
+            // Image is optional; ensure it never blocks model validation
+            ModelState.Remove("ImageUrl");
+            ModelState.Remove("imageFile");
+
             if (ModelState.IsValid)
             {
                 // Handle image upload
@@ -104,12 +109,16 @@ namespace EasyGames.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Book book, IFormFile imageFile)
+        public async Task<IActionResult> Edit(int id, [FromForm] Book book, IFormFile? imageFile)
         {
             if (id != book.Id)
             {
                 return NotFound();
             }
+
+            // Image is optional; ensure it never blocks model validation
+            ModelState.Remove("ImageUrl");
+            ModelState.Remove("imageFile");
 
             if (ModelState.IsValid)
             {
