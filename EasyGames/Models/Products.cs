@@ -17,6 +17,7 @@ namespace EasyGames.Models
 
         [Required]
         [Range(0, int.MaxValue)]
+        [Display(Name = "Stock Quantity")]
         public int StockQuantity { get; set; }
     }
 
@@ -43,6 +44,7 @@ namespace EasyGames.Models
         public string? Platform { get; set; }
 
         [MaxLength(100)]
+        [Display(Name = "Age Rating")]
         public string? AgeRating { get; set; }
     }
 
@@ -53,6 +55,7 @@ namespace EasyGames.Models
         public string Name { get; set; } = string.Empty;
 
         [MaxLength(100)]
+        [Display(Name = "Recommended Age")]
         public string? RecommendedAge { get; set; }
 
         [MaxLength(100)]
