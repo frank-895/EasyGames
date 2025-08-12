@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EasyGames.Data;
@@ -54,10 +55,31 @@ namespace EasyGames.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Platform,AgeRating,Id,Price,StockQuantity")] Game game)
+        public async Task<IActionResult> Create([Bind("Title,Platform,AgeRating,Id,Price,StockQuantity")] Game game, IFormFile? imageFile)
         {
+            // Image is optional
+            ModelState.Remove("ImageUrl");
+            ModelState.Remove("imageFile");
+
             if (ModelState.IsValid)
             {
+                // Handle image upload if provided
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products");
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(stream);
+                    }
+
+                    game.ImageUrl = "/images/products/" + fileName;
+                }
+
                 _context.Add(game);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,17 +108,56 @@ namespace EasyGames.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Title,Platform,AgeRating,Id,Price,StockQuantity")] Game game)
+        public async Task<IActionResult> Edit(int id, [Bind("Title,Platform,AgeRating,Id,Price,StockQuantity")] Game game, IFormFile? imageFile)
         {
             if (id != game.Id)
             {
                 return NotFound();
             }
 
+            // Image is optional
+            ModelState.Remove("ImageUrl");
+            ModelState.Remove("imageFile");
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var existingGame = await _context.Game.AsNoTracking().FirstOrDefaultAsync(g => g.Id == id);
+                    if (existingGame == null)
+                    {
+                        return NotFound();
+                    }
+
+                    if (imageFile != null && imageFile.Length > 0)
+                    {
+                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products");
+                        Directory.CreateDirectory(uploadsFolder);
+
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                        var filePath = Path.Combine(uploadsFolder, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(stream);
+                        }
+
+                        if (!string.IsNullOrEmpty(existingGame.ImageUrl))
+                        {
+                            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existingGame.ImageUrl.TrimStart('/'));
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+                            }
+                        }
+
+                        game.ImageUrl = "/images/products/" + fileName;
+                    }
+                    else
+                    {
+                        game.ImageUrl = existingGame.ImageUrl;
+                    }
+
                     _context.Update(game);
                     await _context.SaveChangesAsync();
                 }

@@ -10,9 +10,12 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+        <!-- 
+            enctype is needed because we are doing image upload.
+            The enctype tells the browser to split the form into separate parts and send files as raw binary data.
+            The controller reads the binary stream into a file. 
+        -->
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">            <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
@@ -38,6 +41,10 @@
                 <input asp-for="StockQuantity" class="form-control" />
                 <span asp-validation-for="StockQuantity" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label for="imageFile" class="control-label">Upload Image</label>
+                <input id="imageFile" type="file" name="imageFile" class="form-control" data-val="false" />
+            </div>            
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

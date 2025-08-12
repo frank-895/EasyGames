@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EasyGames.Data;
@@ -54,10 +55,30 @@ namespace EasyGames.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,RecommendedAge,Material,Id,Price,StockQuantity")] Toy toy)
+        public async Task<IActionResult> Create([Bind("Name,RecommendedAge,Material,Id,Price,StockQuantity")] Toy toy, IFormFile? imageFile)
         {
+            // Image is optional
+            ModelState.Remove("ImageUrl");
+            ModelState.Remove("imageFile");
+
             if (ModelState.IsValid)
             {
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products");
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(stream);
+                    }
+
+                    toy.ImageUrl = "/images/products/" + fileName;
+                }
+
                 _context.Add(toy);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,17 +107,56 @@ namespace EasyGames.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,RecommendedAge,Material,Id,Price,StockQuantity")] Toy toy)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,RecommendedAge,Material,Id,Price,StockQuantity")] Toy toy, IFormFile? imageFile)
         {
             if (id != toy.Id)
             {
                 return NotFound();
             }
 
+            // Image is optional
+            ModelState.Remove("ImageUrl");
+            ModelState.Remove("imageFile");
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var existingToy = await _context.Toy.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
+                    if (existingToy == null)
+                    {
+                        return NotFound();
+                    }
+
+                    if (imageFile != null && imageFile.Length > 0)
+                    {
+                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products");
+                        Directory.CreateDirectory(uploadsFolder);
+
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                        var filePath = Path.Combine(uploadsFolder, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(stream);
+                        }
+
+                        if (!string.IsNullOrEmpty(existingToy.ImageUrl))
+                        {
+                            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existingToy.ImageUrl.TrimStart('/'));
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+                            }
+                        }
+
+                        toy.ImageUrl = "/images/products/" + fileName;
+                    }
+                    else
+                    {
+                        toy.ImageUrl = existingToy.ImageUrl;
+                    }
+
                     _context.Update(toy);
                     await _context.SaveChangesAsync();
                 }
