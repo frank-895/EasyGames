@@ -34,7 +34,6 @@ body {
 main {
     flex: 1 0 auto;
     padding-bottom: 60px; /* Space for footer */
-    background-color: #f9fafb; /* subtle off-white background */
     color: #212529;
     line-height: 1.6;
 }
