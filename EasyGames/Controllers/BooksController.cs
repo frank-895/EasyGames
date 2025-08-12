@@ -54,10 +54,27 @@ namespace EasyGames.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Author,Genre,Id,Price,StockQuantity")] Book book)
+        public async Task<IActionResult> Create(Book book, IFormFile imageFile)
         {
             if (ModelState.IsValid)
             {
+                // Handle image upload
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products");
+                    Directory.CreateDirectory(uploadsFolder); // Ensure folder exists
+
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(stream);
+                    }
+
+                    book.ImageUrl = "/images/products/" + fileName;
+                }
+
                 _context.Add(book);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -84,9 +101,10 @@ namespace EasyGames.Controllers
         // POST: Books/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Title,Author,Genre,Id,Price,StockQuantity")] Book book)
+        public async Task<IActionResult> Edit(int id, Book book, IFormFile imageFile)
         {
             if (id != book.Id)
             {
@@ -97,6 +115,44 @@ namespace EasyGames.Controllers
             {
                 try
                 {
+                    var existingBook = await _context.Book.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
+                    if (existingBook == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Handle image replacement
+                    if (imageFile != null && imageFile.Length > 0)
+                    {
+                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products");
+                        Directory.CreateDirectory(uploadsFolder); // Ensure folder exists
+
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                        var filePath = Path.Combine(uploadsFolder, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(stream);
+                        }
+
+                        // Optional: delete old image
+                        if (!string.IsNullOrEmpty(existingBook.ImageUrl))
+                        {
+                            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existingBook.ImageUrl.TrimStart('/'));
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+                            }
+                        }
+
+                        book.ImageUrl = "/images/products/" + fileName;
+                    }
+                    else
+                    {
+                        // Keep old image if none uploaded
+                        book.ImageUrl = existingBook.ImageUrl;
+                    }
+
                     _context.Update(book);
                     await _context.SaveChangesAsync();
                 }

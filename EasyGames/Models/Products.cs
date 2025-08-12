@@ -19,6 +19,9 @@ namespace EasyGames.Models
         [Range(0, int.MaxValue)]
         [Display(Name = "Stock Quantity")]
         public int StockQuantity { get; set; }
+
+        // images will be stored in wwwroot/images/products
+        public string? ImageUrl { get; set; }
     }
 
     public class Book : Product
