@@ -10,11 +10,15 @@
 
     <!-- Then your custom CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/ProductCard.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/ProductPages.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/EasyGames.styles.css" asp-append-version="true" />
 
     <!-- Google Fonts last or with inline style -->
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
     <header>
@@ -53,11 +57,9 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
 
     <footer class="border-top footer text-muted">
         <div class="container">
