@@ -1,8 +1,86 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿<!-- We don't use a specific model as the List<object> holds different types of products with their own properties. List<object> holds a mixed collection -->
+@model List<object> 
+@{
+    ViewData["Title"] = "EasyGames | Books, Games & Toys";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Hero Section Created by ChatGPT -->
+<div class="hero-section text-center py-5 mb-5">
+    <div class="container">
+        <h1 class="display-3 fw-bold text-primary mb-4">EasyGames</h1>
+        <p class="lead fs-4 mb-4">Your one-stop destination for the best books, games, and toys.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-4 mb-3">
+                <div class="hero-feature">
+                    <i class="fas fa-book fa-3x text-success mb-3"></i>
+                    <h5>Books</h5>
+                    <p class="text-muted">Explore our vast collection of books across all genres</p>
+                    <a href="/Books" class="btn btn-success btn-sm mt-3">Browse Books</a>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="hero-feature">
+                    <i class="fas fa-gamepad fa-3x text-warning mb-3"></i>
+                    <h5>Games</h5>
+                    <p class="text-muted">Board games, video games, and puzzles for everyone</p>
+                    <a href="/Games" class="btn btn-warning btn-sm mt-3">Explore Games</a>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="hero-feature">
+                    <i class="fas fa-puzzle-piece fa-3x text-info mb-3"></i>
+                    <h5>Toys</h5>
+                    <p class="text-muted">Educational and fun toys for children of all ages</p>
+                    <a href="/Toys" class="btn btn-info btn-sm mt-3">Shop Toys</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Popular Products Section -->
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mb-5">Our Most Popular Products</h2>
+        </div>
+    </div>
+    
+    @if (Model != null && Model.Any()) // Safe checking to avoid exceptions
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            @foreach (var product in Model)
+            {
+                <div class="col">
+                    @if (product is Book book)
+                    {
+                        @await Html.PartialAsync("~/Views/Books/_BookCard.cshtml", book) // use existing partial views
+                    }
+                    else if (product is Game game)
+                    {
+                        @await Html.PartialAsync("~/Views/Games/_GameCard.cshtml", game) // use existing partial views
+                    }
+                    else if (product is Toy toy)
+                    {
+                        @await Html.PartialAsync("~/Views/Toys/_ToyCard.cshtml", toy) // use existing partial views
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    // This will be displayed if the popular products list is empty. 
+    {
+        <div class="text-center">
+            <p class="text-muted">No products available at the moment. Check back soon!</p>
+        </div>
+    }
+</div>
+
+<!-- Call to Action Section written by ChatGPT -->
+<div class="bg-light py-5 mt-5">
+    <div class="container text-center">
+        <h3>Ready to Start Shopping?</h3>
+        <p class="lead">Join thousands of satisfied customers who trust EasyGames for quality products.</p>
+    </div>
 </div>
