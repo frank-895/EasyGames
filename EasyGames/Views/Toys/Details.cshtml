@@ -35,7 +35,10 @@
                     <dd>@Model.StockQuantity</dd>
                 </dl>
                 <div class="entity-actions mt-3">
-                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+                    }
                     <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
                 </div>
             </div>

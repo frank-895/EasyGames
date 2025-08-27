@@ -4,6 +4,7 @@ using EasyGames.Models;
 using EasyGames.Data;
 using System;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
 
 namespace EasyGames.Models;
 
@@ -18,6 +19,8 @@ public static class SeedData
             serviceProvider.GetRequiredService<
                 DbContextOptions<ApplicationDbContext>>()))
         {
+            // Create roles and default users
+            CreateRolesAndUsers(serviceProvider).Wait(); // we use Wait() - so it is not async
             // Check if Books already exist
             if (!context.Book.Any())
             {
@@ -70,6 +73,60 @@ public static class SeedData
             }
 
             context.SaveChanges();
+        }
+    }
+
+    private static async Task CreateRolesAndUsers(IServiceProvider serviceProvider)
+    {
+        // serviceProvider is used to for built-in services from ASP.NET
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+        // Create roles if they don't exist
+        string[] roleNames = { "Admin", "User" };
+        foreach (var roleName in roleNames)
+        // we use await for async - as the database calls are I/O and can be slow
+        {
+            if (!await roleManager.RoleExistsAsync(roleName))
+            {
+                await roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+        }
+
+        // Create default admin user
+        var adminEmail = "admin@easygames.com";
+        var adminUser = await userManager.FindByEmailAsync(adminEmail);
+        if (adminUser == null)
+        {
+            adminUser = new IdentityUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                EmailConfirmed = true
+            };
+            var result = await userManager.CreateAsync(adminUser, "Admin123!");
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+        }
+
+        // Create default regular user
+        var userEmail = "user@easygames.com";
+        var regularUser = await userManager.FindByEmailAsync(userEmail);
+        if (regularUser == null)
+        {
+            regularUser = new IdentityUser
+            {
+                UserName = userEmail,
+                Email = userEmail,
+                EmailConfirmed = true
+            };
+            var result = await userManager.CreateAsync(regularUser, "User123!");
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(regularUser, "User");
+            }
         }
     }
 }

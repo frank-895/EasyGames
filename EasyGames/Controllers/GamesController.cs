@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EasyGames.Data;
 using EasyGames.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EasyGames.Controllers
 {
@@ -45,6 +46,7 @@ namespace EasyGames.Controllers
         }
 
         // GET: Games/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -55,6 +57,7 @@ namespace EasyGames.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Title,Platform,AgeRating,Id,Price,StockQuantity")] Game game, IFormFile? imageFile)
         {
             // Image is optional
@@ -88,6 +91,7 @@ namespace EasyGames.Controllers
         }
 
         // GET: Games/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -108,6 +112,7 @@ namespace EasyGames.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Title,Platform,AgeRating,Id,Price,StockQuantity")] Game game, IFormFile? imageFile)
         {
             if (id != game.Id)
@@ -178,6 +183,7 @@ namespace EasyGames.Controllers
         }
 
         // GET: Games/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -198,6 +204,7 @@ namespace EasyGames.Controllers
         // POST: Games/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var game = await _context.Game.FindAsync(id);

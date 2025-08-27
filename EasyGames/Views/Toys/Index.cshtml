@@ -6,9 +6,12 @@
 
 <h1>Toys</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Create New</a>
+    </p>
+}
 
 <div class="product-grid">
     @foreach (var toy in Model)

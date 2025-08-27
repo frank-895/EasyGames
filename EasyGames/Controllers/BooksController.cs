@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EasyGames.Data;
 using EasyGames.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EasyGames.Controllers
 {
@@ -45,6 +46,7 @@ namespace EasyGames.Controllers
         }
 
         // GET: Books/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -55,6 +57,7 @@ namespace EasyGames.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromForm] Book book, IFormFile? imageFile)
         {
             // Image is optional; ensure it never blocks model validation
@@ -88,6 +91,7 @@ namespace EasyGames.Controllers
         }
 
         // GET: Books/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -109,6 +113,7 @@ namespace EasyGames.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [FromForm] Book book, IFormFile? imageFile)
         {
             if (id != book.Id)
@@ -182,6 +187,7 @@ namespace EasyGames.Controllers
         }
 
         // GET: Books/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -202,6 +208,7 @@ namespace EasyGames.Controllers
         // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var book = await _context.Book.FindAsync(id);
