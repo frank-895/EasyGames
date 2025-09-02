@@ -61,7 +61,7 @@ namespace EasyGames.Controllers
             return property != null ? (int)(property.GetValue(product) ?? 0) : 0;
         }
 
-        public IActionResult Privacy()
+        public IActionResult Licence()
         {
             return View();
         }
