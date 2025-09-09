@@ -2,6 +2,12 @@
 @model EasyGames.Models.Book
 
 <div class="product-card">
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-controller="Books" asp-action="Delete" asp-route-id="@Model.Id" class="product-card__delete">
+            <button type="button" class="product-card__delete-btn" aria-label="Delete">&times;</button>
+        </a>
+    }
     <div class="product-card__media">
         <img src="@(string.IsNullOrWhiteSpace(Model.ImageUrl) ? Url.Content("~/images/placeholder.svg") : Model.ImageUrl)"
              alt="@Model.Title"
@@ -32,7 +38,19 @@
 
         <div class="product-card__actions">
             <a asp-controller="Books" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary">Details</a>
-            <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+            }
+            @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin") && Model.StockQuantity > 0) // admins are only restricted on frontend for cleanliness (they don't need to purchase from their own store!)
+            {
+                <form asp-controller="Cart" asp-action="AddToCart" method="post" style="display: inline;">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <input type="hidden" name="productType" value="Book" />
+                    <input type="hidden" name="quantity" value="1" />
+                    <button type="submit" class="btn btn-sm btn-success">Add to Cart</button>
+                </form>
+            }
         </div>
     </div>
 </div>

@@ -13,5 +13,7 @@ namespace EasyGames.Data
         public DbSet<EasyGames.Models.Book> Book { get; set; } = default!;
         public DbSet<EasyGames.Models.Game> Game { get; set; } = default!;
         public DbSet<EasyGames.Models.Toy> Toy { get; set; } = default!;
+        public DbSet<EasyGames.Models.Cart> Carts { get; set; } = default!;
+        public DbSet<EasyGames.Models.CartProduct> CartProducts { get; set; } = default!;
     }
 }

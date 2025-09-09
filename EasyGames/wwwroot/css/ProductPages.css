@@ -1,0 +1,89 @@
+/* Styling created by ChatGPT */
+
+.entity-card {
+    background: #ffffff;
+    border: 1px solid rgba(33,37,41,0.08);
+    border-radius: 0.5rem;
+    box-shadow: 0 8px 28px rgba(16,24,40,0.06);
+    overflow: hidden;
+}
+
+.entity-card__header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(33,37,41,0.06);
+}
+
+.entity-card__body {
+    padding: 1.25rem;
+}
+
+.entity-form .form-group {
+    margin-bottom: 0.85rem;
+}
+
+.entity-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Details layout */
+.entity-detail {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 1.25rem;
+}
+
+@media (max-width: 768px) {
+    .entity-detail {
+        grid-template-columns: 1fr;
+    }
+}
+
+.entity-media {
+    background: #f5f7fb;
+    border: 1px solid rgba(33,37,41,0.06);
+    border-radius: 0.5rem;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.entity-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.entity-meta {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    row-gap: 0.5rem;
+    column-gap: 0.75rem;
+}
+
+@media (max-width: 576px) {
+    .entity-meta { grid-template-columns: 1fr; }
+}
+
+.entity-meta dt {
+    color: #6b7280;
+}
+
+.entity-meta dd {
+    margin-bottom: 0;
+    color: #111827;
+}
+
+.entity-title {
+    margin: 0 0 0.25rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.entity-subtitle {
+    margin: 0;
+    color: #4b5563;
+}

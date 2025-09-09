@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EasyGames.Data;
 using EasyGames.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EasyGames.Controllers
 {
@@ -45,6 +46,7 @@ namespace EasyGames.Controllers
         }
 
         // GET: Toys/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -55,6 +57,7 @@ namespace EasyGames.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Name,RecommendedAge,Material,Id,Price,StockQuantity")] Toy toy, IFormFile? imageFile)
         {
             // Image is optional
@@ -87,6 +90,7 @@ namespace EasyGames.Controllers
         }
 
         // GET: Toys/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -107,6 +111,7 @@ namespace EasyGames.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Name,RecommendedAge,Material,Id,Price,StockQuantity")] Toy toy, IFormFile? imageFile)
         {
             if (id != toy.Id)
@@ -177,6 +182,7 @@ namespace EasyGames.Controllers
         }
 
         // GET: Toys/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -197,6 +203,7 @@ namespace EasyGames.Controllers
         // POST: Toys/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var toy = await _context.Toy.FindAsync(id);

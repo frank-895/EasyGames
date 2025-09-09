@@ -19,6 +19,7 @@
     overflow: hidden;
     box-shadow: 0 6px 18px rgba(16,24,40,0.04);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
 }
 
     .product-card:hover {
@@ -89,6 +90,44 @@
     display: flex;
     gap: 0.5rem;
     margin-top: 0.5rem;
+}
+
+/* Corner delete button */
+.product-card__delete {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 2;
+}
+
+.product-card__delete-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 9999px;
+    background: rgba(17,24,39,0.06);
+    color: #6b7280;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.product-card__delete-btn:hover {
+    background: rgba(220,53,69,0.12);
+    color: #dc3545;
+}
+
+.product-card__delete-btn:focus {
+    outline: 2px solid rgba(13,110,253,0.35);
+    outline-offset: 1px;
+}
+
+.product-card__delete-btn:active {
+    transform: scale(0.95);
 }
 
 @media (max-width: 576px) {

@@ -41,6 +41,9 @@ bld/
 # Ignore uploaded/static images; keep placeholder asset tracked
 EasyGames/wwwroot/images/**
 !EasyGames/wwwroot/images/placeholder.svg
+# Keep seed images tracked
+!EasyGames/wwwroot/images/seeds/
+!EasyGames/wwwroot/images/seeds/**
 
 # Ignore local SQLite database files
 EasyGames/easygames.db

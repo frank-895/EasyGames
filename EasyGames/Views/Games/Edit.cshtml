@@ -4,57 +4,67 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Game</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="entity-card">
+    <div class="entity-card__header">
+        <h1 class="entity-title">Edit Game</h1>
+    </div>
+    <div class="entity-card__body">
         <!-- 
             enctype is needed because we are doing image upload.
             The enctype tells the browser to split the form into separate parts and send files as raw binary data.
             The controller reads the binary stream into a file. 
         -->
-        <form asp-action="Edit" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Platform" class="control-label"></label>
-                <input asp-for="Platform" class="form-control" />
-                <span asp-validation-for="Platform" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AgeRating" class="control-label"></label>
-                <input asp-for="AgeRating" class="form-control" />
-                <span asp-validation-for="AgeRating" class="text-danger"></span>
-            </div>
+        <form asp-action="Edit" method="post" enctype="multipart/form-data" class="entity-form">
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Title" class="form-label"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Platform" class="form-label"></label>
+                        <input asp-for="Platform" class="form-control" />
+                        <span asp-validation-for="Platform" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="AgeRating" class="form-label"></label>
+                        <input asp-for="AgeRating" class="form-control" />
+                        <span asp-validation-for="AgeRating" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="Price" class="form-label"></label>
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="StockQuantity" class="form-label"></label>
+                        <input asp-for="StockQuantity" class="form-control" />
+                        <span asp-validation-for="StockQuantity" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group mb-2">
+                        <label for="ImageFile" class="form-label">Upload Image</label>
+                        <input id="ImageFile" type="file" name="imageFile" class="form-control" data-val="false" />
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="StockQuantity" class="control-label"></label>
-                <input asp-for="StockQuantity" class="form-control" />
-                <span asp-validation-for="StockQuantity" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <label for="ImageFile" class="control-label">Upload Image</label>
-                <input id="ImageFile" type="file" name="imageFile" class="form-control" data-val="false" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="entity-actions mt-2">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

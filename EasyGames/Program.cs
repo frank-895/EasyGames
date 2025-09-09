@@ -24,7 +24,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>() // AddDefaulyIdentity only sets up basic user auth - so we need this to add role management tables in the DB, enabling role-based auth
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+// this is the DI container. It holds mappings of interfaces to concrete implementations.
+// We are using a scoped lifetime (rather than transient), so every HTTP request has a single instance. I.e., all controllers/services get the same instance.
+builder.Services.AddScoped<EasyGames.Services.ICartService, EasyGames.Services.CartService>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -60,6 +66,7 @@ else
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
