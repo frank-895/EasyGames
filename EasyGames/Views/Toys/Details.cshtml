@@ -39,6 +39,16 @@
                     {
                         <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
                     }
+                    @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin") && Model.StockQuantity > 0) // admins are only restricted on frontend for cleanliness (they don't need to purchase from their own store!)
+                    {
+                        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline-flex align-items-center me-3">
+                            <input type="hidden" name="productId" value="@Model.Id" />
+                            <input type="hidden" name="productType" value="Toy" />
+                            <label for="quantity" class="form-label me-2 mb-0">Quantity:</label>
+                            <input type="number" name="quantity" id="quantity" class="form-control me-2" value="1" min="1" max="@Model.StockQuantity" style="width: 80px;" />
+                            <button type="submit" class="btn btn-success">Add to Cart</button>
+                        </form>
+                    }
                     <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
                 </div>
             </div>
