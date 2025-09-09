@@ -48,7 +48,7 @@ public static class SeedData
                     new Game { Title = "God of War", Platform = "PS5", AgeRating = "M", Price = 69.99m, StockQuantity = 6, ImageUrl = "/images/seeds/game-god-of-war.jpg" },
                     new Game { Title = "Halo Infinite", Platform = "Xbox Series X", AgeRating = "T", Price = 59.99m, StockQuantity = 7, ImageUrl = "/images/seeds/game-halo-infinite.png" },
                     new Game { Title = "Elden Ring", Platform = "PS5", AgeRating = "M", Price = 59.99m, StockQuantity = 8, ImageUrl = "/images/seeds/game-elden-ring.jpg" },
-                    new Game { Title = "Fortnite", Platform = "PC", AgeRating = "T", Price = 0.00m, StockQuantity = 100, ImageUrl = "/images/seeds/game-fortnite.jpeg" },
+                    new Game { Title = "Fortnite", Platform = "PC", AgeRating = "T", Price = 10.00m, StockQuantity = 10, ImageUrl = "/images/seeds/game-fortnite.jpeg" },
                     new Game { Title = "Animal Crossing: New Horizons", Platform = "Nintendo Switch", AgeRating = "E", Price = 59.99m, StockQuantity = 9, ImageUrl = "/images/seeds/game-animal-crossing.jpg" },
                     new Game { Title = "The Witcher 3", Platform = "PC", AgeRating = "M", Price = 39.99m, StockQuantity = 10, ImageUrl = "/images/seeds/game-witcher3.jpg" },
                     new Game { Title = "Stardew Valley", Platform = "PC", AgeRating = "E10+", Price = 14.99m, StockQuantity = 15, ImageUrl = "/images/seeds/game-stardew.png" }
