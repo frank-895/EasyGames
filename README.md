@@ -1,15 +1,15 @@
-# EasyGames
+# EasyGames 🏀📖🎮
 
 A simple web application for selling books, games, and toys built with ASP.NET Core MVC.
 
-## Features
+## Features 🛒
 
 - **Product Management**: Admin users can create, edit, and delete products (Books, Games, Toys)
 - **Shopping Cart**: Authenticated users can add items to cart with quantity selection
 - **User Authentication**: Identity-based authentication with role-based authorization
 - **Responsive Design**: Bootstrap-powered UI that works on all devices
 
-## Tech Stack
+## Tech Stack 💻
 
 - ASP.NET Core MVC
 - Entity Framework Core
@@ -17,7 +17,7 @@ A simple web application for selling books, games, and toys built with ASP.NET C
 - Bootstrap 5
 - ASP.NET Core Identity
 
-## Getting Started
+## Getting Started ✅
 
 ### Prerequisites
 
@@ -49,12 +49,12 @@ dotnet run
 
 5. Open your browser and navigate to `https://localhost:5001`
 
-## User Roles
+## User Roles 🧑‍💼
 
 - **Admin**: Can manage products (CRUD operations), no cart access
 - **User**: Can browse products and use shopping cart functionality
 
-## Project Structure
+## Project Structure 📁
 
 - `Models/` - Data models and entities
 - `Controllers/` - MVC controllers
@@ -62,6 +62,6 @@ dotnet run
 - `Services/` - Business logic services
 - `Data/` - Entity Framework context and migrations
 
-## Database
+## Database 🗄️
 
 The application uses SQLite for simplicity. The database file (`easygames.db`) is created automatically when you run the first migration.
