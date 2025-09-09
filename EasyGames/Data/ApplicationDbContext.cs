@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using EasyGames.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace EasyGames.Data
 {
